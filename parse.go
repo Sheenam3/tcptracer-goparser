@@ -63,7 +63,7 @@ func parseViaPort(out string, p string) {
 		parsedLine := strings.Fields(line)
 		if parsedLine[5] == p {
 			fmt.Printf("\n%s\n", line)
-		}
+		} 
 	}
 }
 
