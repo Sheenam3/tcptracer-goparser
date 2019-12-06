@@ -1,3 +1,12 @@
+/*
+
+Usage: 
+ 1. -pid -> ./parse -pid 27515 
+ 2. -port port_name -> ./parse -port 443 
+ 3. -id (Only display PIds used) -> ./parse -id 
+ 4. -name (Only display app names) -> ./parse -name
+
+*/
 package main
 
 import (
