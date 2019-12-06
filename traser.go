@@ -1,3 +1,16 @@
+/*
+Usage:
+ 1. -pid -> ./traser -pid 27515 
+ 2. -name app_name -> ./traser -name kube-apiserver 
+ 3. -sport port_name -> ./traser -sport 23453 
+ 4. dport port_name -> ./traser -dport 8080 
+ 5. -id (Only display PIds used) -> ./traser -id 
+ 6. -app (Only display app names) -> ./traser -app 
+ 7. -sp (Source Port in use) -> ./traser -sp 
+ 8. -dp (Destination Port in use) -> ./traser -dp 
+
+*/
+
 package main
 
 import (
