@@ -44,7 +44,6 @@ func main() {
 
 func parseViaPID(out string, p string) {
 	outlines := strings.Split(out, "\n")
-	//fmt.Println(outlines)
 	l := len(outlines)
 	fmt.Printf("\n%s\n", outlines[0])
 	for _, line := range outlines[1:l-1] {
@@ -70,7 +69,6 @@ func parseViaPort(out string, p string) {
 
 func parseNameUsed(out string)  {
 	outlines := strings.Split(out, "\n")
-	//fmt.Println(outlines)
 	l := len(outlines)
 	title := strings.Fields(outlines[0])
 	fmt.Printf("\n%s\n", title[1])
