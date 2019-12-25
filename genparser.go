@@ -13,20 +13,20 @@ import (
 )
 
 type Log struct {
-	log string
-	pid int64
-	time float64
+	log   string
+	pid   int64
+	time  float64
 	probe string
-
 }
 
 var logging []Log
+
 const (
 	timestamp int = 0
-	pid int = 2
-
+	pid       int = 2
 )
 
+//logging := []Log{}
 func runTCP(tool string) {
 
 	quit := make(chan bool)
@@ -56,6 +56,7 @@ func runTCP(tool string) {
 			default:
 				line, _, _ := buf.ReadLine()
 				parsedLine := strings.Fields(string(line))
+				//println("TCP TRACER", parsedLine[0])
 				if parsedLine[0] != "Tracing" {
 					if parsedLine[0] != "TIME(s)" {
 						ppid, err := strconv.ParseInt(parsedLine[pid], 10, 64)
@@ -75,10 +76,10 @@ func runTCP(tool string) {
 				}
 
 				if num > 10 {
+					//fmt.Println("cALLING quit in tcptracer")
 					quit <- true
 				}
 				num += 1
-
 
 			}
 		}
@@ -110,7 +111,8 @@ func runTCP(tool string) {
 			default:
 				line, _, _ := buf.ReadLine()
 				parsedLine := strings.Fields(string(line))
-					if parsedLine[0] != "TIME(s)" {
+				//println(parsedLine[0])
+				if parsedLine[0] != "TIME(s)" {
 					ppid, err := strconv.ParseInt(parsedLine[1], 10, 64)
 					if err != nil {
 						println("TCPConnect PID Error")
@@ -119,6 +121,7 @@ func runTCP(tool string) {
 					if err != nil {
 						println(" TCPConnect Timestamp Error")
 					}
+
 					pn := probeName.Executable()
 					n := Log{log: string(line), pid: ppid, time: timest, probe: pn}
 					logging = append(logging, n)
@@ -134,15 +137,15 @@ func runTCP(tool string) {
 		}
 	}
 
-
 }
 func main() {
 
-  go runTCP("tcptracer")
-  go runTCP("tcpconnect")
+	go runTCP("tcptracer")
+	go runTCP("tcpconnect")
 	time.Sleep(10 * time.Second)
 	for i := 0; i < 19; i++ {
 		fmt.Printf("Struct %d  includes: %v\n", i, logging[i])
-		fmt.Printf("Output %d: %v\n PID:%v \t| TimeStamp:%v \t | ProbeName:%v \n", i, logging[i].log, logging[i].pid, logging[i].time, logging[i].probe)}
+		fmt.Printf("Output %d: %v\n PID:%v \t| TimeStamp:%v \t | ProbeName:%v \n", i, logging[i].log, logging[i].pid, logging[i].time, logging[i].probe)
+	}
 
 }
