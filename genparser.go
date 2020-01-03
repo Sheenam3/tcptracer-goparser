@@ -2,11 +2,13 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	ps "github.com/mitchellh/go-ps"
 	"log"
 	"os"
 	"os/exec"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -19,12 +21,58 @@ type Log struct {
 	probe string
 }
 
+type Monitor struct {
+	Alloc,
+	TotalAlloc,
+	Sys,
+	Mallocs,
+	Frees,
+	LiveObjects,
+	PauseTotalNs uint64
+
+	NumGC        uint32
+	NumGoroutine int
+}
+
 var logging []Log
 var tcplog []Log
 
 const (
 	timestamp int = 0
 )
+
+func NewMonitor(duration int) {
+	var m Monitor
+	var rtm runtime.MemStats
+	var interval = time.Duration(duration) * time.Second
+	for {
+		<-time.After(interval)
+
+		// Read full mem stats
+		runtime.ReadMemStats(&rtm)
+
+		// Number of goroutines
+		m.NumGoroutine = runtime.NumGoroutine()
+
+		// Misc memory stats
+		m.Alloc = rtm.Alloc
+		m.TotalAlloc = rtm.TotalAlloc
+		m.Sys = rtm.Sys
+		m.Mallocs = rtm.Mallocs
+		m.Frees = rtm.Frees
+
+		// Live objects = Mallocs - Frees
+		m.LiveObjects = m.Mallocs - m.Frees
+
+		// GC Stats
+		m.PauseTotalNs = rtm.PauseTotalNs
+		m.NumGC = rtm.NumGC
+
+		// Just encode to json and print
+		b, _ := json.Marshal(m)
+		fmt.Println(string(b))
+	}
+}
 
 func runTCP(tool string) {
 
@@ -142,6 +190,8 @@ func main() {
 	go runTCP("tcpconnect")
 	for {
 		time.Sleep(10 * time.Second)
+		//Displays stats after 10 seconds
+		go NewMonitor(10)
 	}
 	
 }
