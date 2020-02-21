@@ -1,5 +1,5 @@
 
-package main
+package parser
 
 import (
 	"bufio"
@@ -75,7 +75,7 @@ func NewMonitor(duration int) {
 	}
 }
 
-func runTCP(tool string) {
+func RunTCP(tool string) {
 
 	//quit := make(chan bool)
 
@@ -185,14 +185,14 @@ func runTCP(tool string) {
 	}
 
 }
-func main() {
+/*func main() {
 
 	//go runTCP("tcptracer")
 	//go runTCP("tcpconnect")
-	for {
+	/*for {
 		time.Sleep(10 * time.Second)
 		//Displays stats after 10 seconds
 		go NewMonitor(10)
-	}
+	}*/
 	
-}
+}*/
